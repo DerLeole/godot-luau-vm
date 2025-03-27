@@ -1,9 +1,20 @@
 # GDLuau
+> [!NOTE]  
+> This is a fork of [GDLuau](https://github.com/Manonox/GDLuau) that I created to create some PRs for the upstream,
+> but eventually will be spun out into and independent implementation to support extra specific features
+> for sandboxed in-game code authoring and execution.
+>
+> Goals:
+> - Implementation of the debugging API from Luau (also for use in the upstream).
+> - Better documentation (also for use in the upstream).
+> - Toolset for easy definition of native APIs to use in sandboxed code environments.
+> - Luau ingame editor similar to Godot's native engine editor with highltighting and linting.
+> - Code analysis tools.
+
 A GDExtension that adds [Luau](https://luau-lang.org) C/C++ API bindings to GDScript
 *(+ some extras)*
 
-> **Warning**
->
+> [!IMPORTANT]
 > This repository's `main` branch is only usable with
 > [GDExtension](https://godotengine.org/article/introducing-gd-extensions)
 > from Godot's `master` branch.
