@@ -169,6 +169,9 @@ void LuauVM::_bind_passthrough_methods() {
         ClassDB::bind_method(D_METHOD("luaL_ref", "index"), &LuauVM::lua_ref);
         ClassDB::bind_method(D_METHOD("luaL_unref", "ref"), &LuauVM::lua_unref);
         ClassDB::bind_method(D_METHOD("luaL_getref", "ref"), &LuauVM::lua_getref);
+
+        ClassDB::bind_method(D_METHOD("lua_resume", "nargs"), &LuauVM::lua_resume, DEFVAL(0));
+        ClassDB::bind_method(D_METHOD("lua_break"), &LuauVM::lua_break);
     }
 
     // Auxiliary library
@@ -194,6 +197,12 @@ void LuauVM::_bind_passthrough_methods() {
         ClassDB::bind_method(D_METHOD("luaL_checkstack", "size", "message"), &LuauVM::luaL_checkstack);
         // ClassDB::bind_method(D_METHOD("luaL_checkudata", ""))
         ClassDB::bind_method(D_METHOD("luaL_checkoption", "narg", "array", "def"), &LuauVM::luaL_checkoption, DEFVAL(""));
+    }
+
+    // Debug library
+    {
+        ClassDB::bind_method(D_METHOD("lua_singlestep", "enabled"), &LuauVM::lua_singlestep);
+        ClassDB::bind_method(D_METHOD("lua_breakpoint", "funcindex", "line", "enabled"), &LuauVM::lua_breakpoint);
     }
 }
 
@@ -544,7 +553,20 @@ int (LuauVM::lua_getref)(int ref) {
     return ::lua_getref(L, ref);
 }
 
-// lua_resume
+void LuauVM::lua_resume(int nargs) {
+    if (interruptedthread) {
+        ::lua_resume(interruptedthread, NULL, nargs);
+        interruptedthread = nullptr;
+    } else
+    {
+        ::lua_resume(L, NULL, nargs);
+    }
+}
+
+void LuauVM::lua_break() {
+    ::lua_break(L);
+}
+
 // lua_touserdata
 // lua_gethook
 // lua_gethookcount
@@ -676,5 +698,17 @@ int LuauVM::luaL_checkoption(int narg, const Array &array, const String &def) {
 // luaL_optnumber
 // luaL_optstring
 
+
+#pragma endregion
+
+#pragma region Debug
+
+void LuauVM::lua_singlestep(bool enabled) {
+    ::lua_singlestep(L, enabled);
+}
+
+void LuauVM::lua_breakpoint(int funcindex, int line, bool enabled) {
+    ::lua_breakpoint(L, funcindex, line, enabled);
+}
 
 #pragma endregion

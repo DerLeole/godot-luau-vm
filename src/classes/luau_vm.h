@@ -162,6 +162,9 @@ public:
     void lua_unref(int ref);
     int (lua_getref)(int ref);
 
+    void lua_resume(int nargs);
+    void lua_break();
+
     #pragma endregion
 
     #pragma region Auxiliary
@@ -191,6 +194,14 @@ public:
     void luaL_checktype(int narg, int type);
     void luaL_checkstack(int sz, const String &messsage);
     int luaL_checkoption(int narg, const Array &array, const String &def);
+
+    #pragma endregion
+
+    #pragma region Debug
+    lua_State* interruptedthread = nullptr;
+
+    void lua_singlestep(bool enabled);
+    void lua_breakpoint(int funcindex, int line, bool enabled);
 
     #pragma endregion
 };

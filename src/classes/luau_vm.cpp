@@ -59,6 +59,22 @@ void luau_vm_interrupt_method(lua_State* L, int gc) {
     node->emit_signal("interrupt");
 }
 
+// Debug
+void luau_vm_debugbreak_method(lua_State* L, lua_Debug* ar) {
+    LuauVM *node = lua_getnode(L);
+    node->emit_signal("debugbreak", ar-> currentline);
+}
+
+void luau_vm_debugstep_method(lua_State* L, lua_Debug* ar) {
+    LuauVM *node = lua_getnode(L);
+    node->emit_signal("debugstep", ar-> currentline);
+}
+
+void luau_vm_debuginterrupt_method(lua_State* L, lua_Debug* ar) {
+    // save interrupted thread/coroutine
+    LuauVM *node = lua_getnode(L);
+    node->interruptedthread = static_cast<lua_State*>(ar->userdata);
+}
 
 LuauVM::LuauVM() {
     L = lua_newstate(lua_alloc, nullptr);
@@ -66,6 +82,10 @@ LuauVM::LuauVM() {
     create_metatables();
 
     lua_callbacks(L)->interrupt = luau_vm_interrupt_method;
+
+    // Debug
+    lua_callbacks(L)->debugbreak = luau_vm_debugbreak_method;
+    lua_callbacks(L)->debugstep = luau_vm_debugstep_method;
 }
 
 void LuauVM::set_interrupt_cooldown(const double p_interrupt_cooldown) { interrupt_cooldown = p_interrupt_cooldown; }
@@ -91,6 +111,9 @@ void LuauVM::_bind_methods() {
 
     ADD_SIGNAL(MethodInfo("stdout", PropertyInfo(Variant::STRING, "message")));
     ADD_SIGNAL(MethodInfo("interrupt"));
+    // Debug
+    ADD_SIGNAL(MethodInfo("debugbreak", PropertyInfo(Variant::INT, "currentline")));
+    ADD_SIGNAL(MethodInfo("debugstep", PropertyInfo(Variant::INT, "currentline")));
 }
 
 int metatable_object__eq(lua_State *L) {
