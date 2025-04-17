@@ -1,0 +1,13 @@
+[configuration]
+
+entry_symbol = "godotluauvm_library_init"
+compatibility_minimum = "4.2"
+
+[libraries]
+
+windows.debug.x86_64 = "res://addons/godot-luau-vm/bin/windows/godot-luau-vm.windows.template_debug.x86_64.dll"
+windows.release.x86_64 = "res://addons/godot-luau-vm/bin/windows/godot-luau-vm.windows.template_release.x86_64.dll"
+linux.debug.x86_64 = "res://addons/godot-luau-vm/bin/linux/libgodot-luau-vm.linux.template_debug.x86_64.so"
+linux.release.x86_64 = "res://addons/godot-luau-vm/bin/linux/libgodot-luau-vm.linux.template_release.x86_64.so"
+macos.debug = "res://addons/godot-luau-vm/bin/macos/macos.framework/libgodot-luau-vm.macos.template_debug"
+macos.release = "res://addons/godot-luau-vm/bin/macos/macos.framework/libgodot-luau-vm.macos.template_release"

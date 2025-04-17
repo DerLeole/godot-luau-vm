@@ -11,7 +11,7 @@ def validate_parent_dir(key, val, env):
         raise UserError("'%s' is not a directory: %s" % (key, os.path.dirname(val)))
 
 
-libname = "gdluau"
+libname = "godot-luau-vm"
 projectdir = "demo"
 
 localEnv = Environment(tools=["default"], PLATFORM="")
@@ -133,7 +133,7 @@ library = env.SharedLibrary(
     source=sources,
 )
 
-copy = env.InstallAs("{}/addons/gdluau/bin/{}/{}".format(projectdir, env["platform"], file), library)
+copy = env.InstallAs("{}/addons/godot-luau-vm/bin/{}/{}".format(projectdir, env["platform"], file), library)
 
 default_args = [library, copy]
 if localEnv.get("compiledb", False):
