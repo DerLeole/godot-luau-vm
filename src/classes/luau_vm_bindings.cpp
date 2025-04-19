@@ -171,6 +171,7 @@ void LuauVM::_bind_passthrough_methods() {
         ClassDB::bind_method(D_METHOD("luaL_getref", "ref"), &LuauVM::lua_getref);
 
         ClassDB::bind_method(D_METHOD("lua_resume", "nargs"), &LuauVM::lua_resume, DEFVAL(0));
+        ClassDB::bind_method(D_METHOD("lua_yield", "nresults"), &LuauVM::lua_yield, DEFVAL(0));
         ClassDB::bind_method(D_METHOD("lua_break"), &LuauVM::lua_break);
     }
 
@@ -561,6 +562,10 @@ void LuauVM::lua_resume(int nargs) {
     {
         ::lua_resume(L, NULL, nargs);
     }
+}
+
+void LuauVM::lua_yield(int nresults) {
+    ::lua_yield(L, nresults);
 }
 
 void LuauVM::lua_break() {

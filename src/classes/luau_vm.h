@@ -163,6 +163,7 @@ public:
     int (lua_getref)(int ref);
 
     void lua_resume(int nargs);
+    void lua_yield(int nresults);
     void lua_break();
 
     #pragma endregion
